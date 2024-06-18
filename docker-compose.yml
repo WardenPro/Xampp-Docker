@@ -1,0 +1,53 @@
+services:
+
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app_network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  # apache legacy
+  # apache:
+  #   image: httpd:latest
+  #   container_name: my-apache-app
+  #   ports:
+  #   - '8000:80'
+  #   volumes:
+  #   - ./website:/usr/local/apache2/htdocs
+  #   networks:
+  #   - app_network
+
+  apache:
+    build: ./apache-php
+    container_name: my-apache-app
+    ports:
+      - '8000:80'
+    volumes:
+      - ./website:/var/www/html
+    networks:
+      - app_network
+  
+volumes:
+  db_data:
+
+networks:
+  app_network:
+    driver: bridge
